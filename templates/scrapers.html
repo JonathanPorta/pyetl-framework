@@ -1,0 +1,8 @@
+<h2>Scrapers</h2>
+{% if scrapers %}
+  <ul>
+    {% for scraper in scrapers %}
+      <li><a href='/scrapers/{{ scraper }}' target='_blank'>{{ scraper }}</a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
