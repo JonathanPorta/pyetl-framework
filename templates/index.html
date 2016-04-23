@@ -29,22 +29,11 @@
           <br>
         </div>
         <div class="col-sm-5 col-sm-offset-1">
-          {% if results %}
-            <h2>Frequencies</h2>
+          {% if job_id %}
+            <h2>Job</h2>
             <br>
             <div id="results">
-              <table class="table table-striped" style="max-width: 300px;">
-                <thead>
-                  <tr>
-                    <th>A Tag</th>
-                  </tr>
-                </thead>
-                {% for result in results%}
-                  <tr>
-                    <td>{{ result }}</td>
-                  </tr>
-                {% endfor %}
-              </table>
+              <a href="results/{{ job_id }}" target='_blank'>{{ job_id }}</a>
             </div>
           {% endif %}
         </div>

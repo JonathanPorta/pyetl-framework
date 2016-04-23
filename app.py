@@ -18,16 +18,16 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    errors = []
-    results = {}
+    job_id = ""
     if request.method == 'POST':
         url = request.form['url']
         job = q.enqueue_call(
             func=scrape, args=(url,), result_ttl=5000
         )
-        print(job.get_id())
+        job_id = job.get_id()
+        print(job_id)
 
-    return render_template('index.html', errors=errors, results=results)
+    return render_template('index.html', job_id=job_id)
 
 @app.route('/results/<job_key>', methods=['GET'])
 def results_job_key(job_key):
