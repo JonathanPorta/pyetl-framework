@@ -3,8 +3,8 @@ import requests
 import operator
 import re
 import sys
-from library import ScraperManager as sm
-from scrapers import YellowstoneOrion
+from lib import ScraperManager
+
 from flask import Flask, render_template, request
 from collections import Counter
 from bs4 import BeautifulSoup
@@ -13,17 +13,21 @@ from rq.job import Job
 
 from worker import conn
 
-print(sm)
-print(YellowstoneOrion)
-# print(sys.modules)
 # print(sm)
+# print(YellowstoneOrion)
+# print(library)
+# print(sys.modules)
+print("__name__: ", __name__)
+
+# Define App - import App from app
+# from flask import Flask
+App = Flask(__name__)
+App.config.from_object(os.environ['APP_SETTINGS'])
 
 q = Queue(connection=conn)
 
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
 
-@app.route('/', methods=['GET', 'POST'])
+@App.route('/', methods=['GET', 'POST'])
 def index():
     job_id = ""
     if request.method == 'POST':
@@ -36,7 +40,7 @@ def index():
 
     return render_template('index.html', job_id=job_id)
 
-@app.route('/results/<job_key>', methods=['GET'])
+@App.route('/results/<job_key>', methods=['GET'])
 def results_job_key(job_key):
     job = Job.fetch(job_key, connection=conn)
 
@@ -58,9 +62,18 @@ def scrape(url):
         print(tags)
         return tags
 
-# @app.route('/scrapers', methods=['GET'])
-# def scrapers_list():
+@App.route('/scrapers', methods=['GET'])
+def scrapers_list():
+    sm = ScraperManager(App)
+    scrapers = sm.list_scrapers()
+    return render_template('scrapers.html', scrapers=scrapers)
 
+@App.route('/scrapers/<name>', methods=['GET'])
+def scrapers_detail(name):
+    sm = ScraperManager(App)
+    scraper = sm.load_scraper(name)
+    scraper.start()
+    return render_template('scraper.html', scraper=scraper)
 
 if __name__ == '__main__':
-    app.run()
+    App.run()

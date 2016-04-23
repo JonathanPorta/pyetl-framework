@@ -1,14 +1,12 @@
 from lib import Scraper as Scraper
 
-class YellowstoneOrion(Scraper):
+class YellowstonePropertyTax(Scraper):
     def __init__(self, scraper_manager, name):
-        print("YellowstoneOrion::init()")
-
         super().__init__(scraper_manager, name)
+        print("YellowstonePropertyTax::init()")
         self.scraper_manager = scraper_manager
         self.name = name
 
     def start(self):
-        print("YellowstoneOrion::start()")
         super().start()
-        
+        print("YellowstonePropertyTax::start()")

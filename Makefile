@@ -1,5 +1,5 @@
 run:
-	gunicorn app:app --daemon
+	gunicorn app:App --daemon
 	python worker.py ; killall -9 gunicorn
 
 run_worker:
