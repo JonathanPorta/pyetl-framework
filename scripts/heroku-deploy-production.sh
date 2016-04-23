@@ -1,3 +1,3 @@
 #!/bin/bash
 
-git push origin heroku-production/master
+git push heroku-production master
