@@ -1,6 +1,9 @@
 run:
 	python manage.py runserver
 
+run_worker:
+	python worker.py 
+
 deps: install_local_dev
 
 install_local_dev:
