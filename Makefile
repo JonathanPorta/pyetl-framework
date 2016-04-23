@@ -1,9 +1,10 @@
-all: 
+run:
+	python manage.py runserver
 
 deps: install_local_dev
 
 install_local_dev:
-	./scripts/localdev.sh
+	./scripts/localdev-setup.sh
 
 setup_heroku:
 	./scripts/heroku-setup.sh
