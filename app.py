@@ -2,7 +2,9 @@ import os
 import requests
 import operator
 import re
-
+import sys
+from library import ScraperManager as sm
+from scrapers import YellowstoneOrion
 from flask import Flask, render_template, request
 from collections import Counter
 from bs4 import BeautifulSoup
@@ -10,6 +12,11 @@ from rq import Queue
 from rq.job import Job
 
 from worker import conn
+
+print(sm)
+print(YellowstoneOrion)
+# print(sys.modules)
+# print(sm)
 
 q = Queue(connection=conn)
 
@@ -50,6 +57,10 @@ def scrape(url):
         tags = raw.find_all('a')
         print(tags)
         return tags
+
+# @app.route('/scrapers', methods=['GET'])
+# def scrapers_list():
+
 
 if __name__ == '__main__':
     app.run()
