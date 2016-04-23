@@ -1,13 +1,17 @@
 run:
-	python manage.py runserver
+	gunicorn app:app --daemon
+	python worker.py ; killall -9 gunicorn
 
 run_worker:
-	python worker.py 
+	python worker.py
 
 deps: install_local_dev
 
 install_local_dev:
 	./scripts/localdev-setup.sh
+
+setup_local_redis:
+	./scripts/localdev-redis.sh
 
 setup_heroku:
 	./scripts/heroku-setup.sh
