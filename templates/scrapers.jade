@@ -1,0 +1,12 @@
+extends ./layout.jade
+
+block title
+  |pyscrape - Scrapers
+
+block content
+  h2 Scrapers
+
+  ul
+    each scraper in scrapers
+      li
+        a(href="/scrapers/#{scraper}")= scraper
