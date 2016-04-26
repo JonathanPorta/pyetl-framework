@@ -26,9 +26,9 @@ def index():
     job_id = ""
     if request.method == 'POST':
         url = request.form['url']
-        job = q.enqueue_call(
-            func=scrape, args=(url,), result_ttl=5000
-        )
+        job = q.enqueue('workers.YellowstoneOrion')
+        #     func=scrape, args=(url,), result_ttl=5000
+        # )
         job_id = job.get_id()
         print(job_id)
 
