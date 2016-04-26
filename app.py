@@ -40,7 +40,7 @@ def results_job_key(job_key):
 
     if job.is_finished:
         print("made it here")
-        master_data = jsonify(job.result)
+        master_data = job.result
     else:
         master_data =  "Nay!", 202
     return jsonify(master_data)
@@ -89,6 +89,7 @@ def scrape(url):
         for sections in master_data_sections:
             master_data[sections] = eval(sections)
 
+        master_data = {"fuck you":False}
         return master_data
 
 @App.route('/scrapers', methods=['GET'])

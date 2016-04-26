@@ -1,6 +1,8 @@
 run:
-	gunicorn app:App --daemon
-	python worker.py ; killall -9 gunicorn
+	foreman start
+
+run_flask:
+	gunicorn app:App
 
 run_worker:
 	python worker.py
