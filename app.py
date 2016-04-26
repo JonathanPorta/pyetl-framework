@@ -14,10 +14,10 @@ from rq.job import Job
 
 from worker import conn
 
-# Define App - import App from app
-# from flask import Flask
-App = Flask(__name__)
+# Define App
+App = Flask(__name__) # Todo: Understand why we use __name__ here.
 App.config.from_object(os.environ['APP_SETTINGS'])
+App.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension') # Jade template support
 
 q = Queue(connection=conn)
 
@@ -32,7 +32,7 @@ def index():
         job_id = job.get_id()
         print(job_id)
 
-    return render_template('index.html', job_id=job_id)
+    return render_template('index.jade', job_id=job_id)
 
 @App.route('/results/<job_key>', methods=['GET'])
 def results_job_key(job_key):
@@ -43,7 +43,8 @@ def results_job_key(job_key):
         master_data = jsonify(job.result)
     else:
         master_data =  "Nay!", 202
-    return render_template('../../results.html', master_data=master_data)
+    return jsonify(master_data)
+
 def scrape(url):
     # Get the url that they entered
     try:
@@ -94,14 +95,14 @@ def scrape(url):
 def scrapers_list():
     sm = ScraperManager(App)
     scrapers = sm.list_scrapers()
-    return render_template('scrapers.html', scrapers=scrapers)
+    return render_template('scrapers.jade', scrapers=scrapers)
 
 @App.route('/scrapers/<name>', methods=['GET'])
 def scrapers_detail(name):
     sm = ScraperManager(App)
     scraper = sm.load_scraper(name)
     scraper.start()
-    return render_template('scraper.html', scraper=scraper)
+    return render_template('scraper.jade', scraper=scraper)
 
 if __name__ == '__main__':
     App.run()
