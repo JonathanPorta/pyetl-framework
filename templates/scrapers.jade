@@ -9,4 +9,4 @@ block content
   ul
     each scraper in scrapers
       li
-        a(href="/scrapers/#{scraper}")= scraper
+        a(href="/scrapers/#{scraper['class_name']}")= scraper['name']
