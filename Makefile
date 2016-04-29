@@ -28,3 +28,14 @@ deploy_staging:
 
 deploy_production:
 	./scripts/heroku-deploy-production.sh
+
+release: package pip_release
+
+package: clean
+	python setup.py sdist
+
+pip_release:
+	twine upload dist/*
+
+clean:
+	rm -rf dist/

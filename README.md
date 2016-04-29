@@ -12,3 +12,11 @@ git remote add heroku-staging git@heroku.com:pyscrape-staging.git
 git remote add heroku-production git@heroku.com:pyscrape-production.git
 Or
 `make deploy`
+
+### Release
+`make release`
+
+### Usage
+Pyscraper is meant as a framework to help with the extraction, transformation and loading of data between sources.
+
+To get started, create a new Python project and then `pip install pypscraper-framework`.
