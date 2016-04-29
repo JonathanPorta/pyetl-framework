@@ -1,8 +1,11 @@
 run:
 	foreman start
 
-run_flask:
+run_gunicorn:
 	gunicorn app:App
+
+run_flask:
+	python app.py
 
 run_worker:
 	python worker.py

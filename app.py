@@ -14,10 +14,16 @@ from rq.job import Job
 
 from worker import conn
 
+from workers.yellowstone_orion import YellowstoneOrion
+
 # Define App
 App = Flask(__name__) # Todo: Understand why we use __name__ here.
 App.config.from_object(os.environ['APP_SETTINGS'])
 App.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension') # Jade template support
+
+# init our scraper manager - the magic maker that loads our scrapers.
+scraper_manager = ScraperManager(App)
+scraper_manager.load_scrapers() # blocking call that loads scrapers from FS.
 
 q = Queue(connection=conn)
 
@@ -26,9 +32,13 @@ def index():
     job_id = ""
     if request.method == 'POST':
         url = request.form['url']
+        # job = q.enqueue('workers.YellowstoneOrion', args=(True))
+        # #     func=scrape, args=(url,), result_ttl=5000
+        # # )
         job = q.enqueue_call(
-            func=scrape, args=(url,), result_ttl=5000
+            func=YellowstoneOrion().execute, args=[url], result_ttl=5000
         )
+
         job_id = job.get_id()
         print(job_id)
 
@@ -46,62 +56,19 @@ def results_job_key(job_key):
     return jsonify(master_data)
 
 def scrape(url):
-    # Get the url that they entered
-    try:
-        r = requests.get(url)
-    except Exception as e:
-        print("Unable to get URL: {}".format(e))
-    # Process the HTML in the requst using BeautifulSoup
-    if r:
-        html = r.content.decode('ascii', 'ignore')
-        raw = BeautifulSoup(html, "lxml")
-        raw = raw.prettify()
-        soup = BeautifulSoup(raw,"lxml")
-        tags = soup.find_all('td')
-        sections = soup.find_all('bgcolor="#F2E3B8"')
-
-        owner_fields = ['Primary Owner','Tax ID','Geo Code','Property Address','Legal Description','Property Type']
-        site_fields = ['Neighborhood Code','Parking type','Utilities','Lot Size','Location','Fronting','Parking Prox','Access','Topography']
-        owner_info = {}
-        site_info = {}
-        master_data_sections = []
-        master_data = {}
-        tagsections = soup.find_all('td', {'bgcolor' : '#F2E3B8'})
-
-        for j,k in enumerate(tagsections):
-            print(k)
-            master_data_sections.append(k)
-        for i,e in enumerate(tags):
-
-            d = str(e)
-
-            for field in owner_fields:
-                if field in d:
-                    field_value = str(tags[i+1].text.strip())
-                    field_value = re.sub('[^a-zA-Z0-9-_*. ,]', '', field_value)
-                    owner_info[field] = field_value
-            for field in site_fields:
-                if field in d:
-                    field_value = str(tags[i+1].text.strip())
-                    field_value = re.sub('[^a-zA-Z0-9-_*. ,]', '', field_value)
-                    site_info[field] = field_value
-
-        for sections in master_data_sections:
-            master_data[sections] = eval(sections)
-
-        master_data = {"fuck you":False}
-        return master_data
+    # TODO: Removed actual scraping code for testing
+    master_data = {"url": url}
+    return master_data
 
 @App.route('/scrapers', methods=['GET'])
 def scrapers_list():
-    sm = ScraperManager(App)
-    scrapers = sm.list_scrapers()
-    return render_template('scrapers.jade', scrapers=scrapers)
+    scrapers = scraper_manager.get_scrapers()
+    print('scrapers: ', scrapers)
+    return render_template('scrapers.jade', scrapers=scrapers.values())
 
 @App.route('/scrapers/<name>', methods=['GET'])
 def scrapers_detail(name):
-    sm = ScraperManager(App)
-    scraper = sm.load_scraper(name)
+    scraper = scraper_manager.init_scraper(name)
     scraper.start()
     return render_template('scraper.jade', scraper=scraper)
 

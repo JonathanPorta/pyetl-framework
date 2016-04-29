@@ -7,7 +7,9 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'supersecret'
     BASE_DIR = basedir
-    SCRAPERS_DIR = os.path.join(basedir, 'scrapers')
+    SCRAPERS_PKG = 'scrapers'
+    SCRAPERS_DIR = os.path.join(basedir, SCRAPERS_PKG)
+
 
 class ProductionConfig(Config):
     DEBUG = False
