@@ -9,6 +9,9 @@ class Config(object):
     BASE_DIR = basedir
     SCRAPERS_PKG = 'scrapers'
     SCRAPERS_DIR = os.path.join(basedir, SCRAPERS_PKG)
+    JOBS_PKG = 'jobs'
+    JOBS_DIR = os.path.join(basedir, JOBS_PKG)
+
 
 
 class ProductionConfig(Config):
