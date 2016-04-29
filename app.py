@@ -14,7 +14,7 @@ from rq.job import Job
 
 from worker import conn
 
-from workers.yellowstone_orion import YellowstoneOrion
+# from workers.yellowstone_orion import YellowstoneOrion
 
 # Define App
 App = Flask(__name__) # Todo: Understand why we use __name__ here.
@@ -23,7 +23,7 @@ App.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension') # Jade template 
 
 # init our scraper manager - the magic maker that loads our scrapers.
 scraper_manager = ScraperManager(App)
-scraper_manager.load_scrapers() # blocking call that loads scrapers from FS.
+scraper_manager.load() # blocking call that loads scrapers from FS.
 
 q = Queue(connection=conn)
 
@@ -63,14 +63,21 @@ def scrape(url):
 @App.route('/scrapers', methods=['GET'])
 def scrapers_list():
     scrapers = scraper_manager.get_scrapers()
+    print(scraper_manager._jobs)
     print('scrapers: ', scrapers)
     return render_template('scrapers.jade', scrapers=scrapers.values())
 
 @App.route('/scrapers/<name>', methods=['GET'])
-def scrapers_detail(name):
+def scraper_detail(name):
     scraper = scraper_manager.init_scraper(name)
-    scraper.start()
     return render_template('scraper.jade', scraper=scraper)
+
+@App.route('/scrapers/<name>/start', methods=['GET'])
+def scraper_start(name):
+    scraper = scraper_manager.init_scraper(name)
+    scraper.start(q)
+    print("log shit")
+    return render_template('scraper_start.jade', scraper=scraper)
 
 if __name__ == '__main__':
     App.run()
