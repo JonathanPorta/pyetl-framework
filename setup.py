@@ -22,7 +22,7 @@ with open(path.join(here, 'VERSION'), encoding='utf-8') as f:
     version = f.read()
 
 setup(
-    name='pyscraper-framework',
+    name='pyscraper_framework',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -90,7 +90,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'pyscraper-framework': ['templates/*', '.env', '../README.md', '../VERSION'], # TODO: Separate out the ui from the framework
+        'pyscraper_framework': ['templates/*', '.env', '../README.md', '../VERSION'], # TODO: Separate out the ui from the framework
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -102,9 +102,9 @@ setup(
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.
-    # entry_points={
-    #     'console_scripts': [
-    #         'sample=sample:main',
-    #     ],
-    # },
+    entry_points={
+        'console_scripts': [
+            'pyscraper_framework=pyscraper_framework:App',
+        ],
+    },
 )
