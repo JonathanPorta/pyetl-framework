@@ -2,13 +2,13 @@ run:
 	foreman start
 
 run_gunicorn:
-	gunicorn app:App
+	gunicorn pyscraper-framework:App
 
 run_flask:
-	python app.py
+	python pyscraper-framework/app.py
 
 run_worker:
-	python worker.py
+	python pyscraper-framework/worker.py
 
 deps: install_local_dev
 
