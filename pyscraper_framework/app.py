@@ -11,14 +11,17 @@ from collections import Counter
 from bs4 import BeautifulSoup
 from rq import Queue
 from rq.job import Job
+from importlib.machinery import SourceFileLoader
 
 from pyscraper_framework.worker import conn
 
-# from workers.yellowstone_orion import YellowstoneOrion
-
 # Define App
-App = Flask(__name__) # Todo: Understand why we use __name__ here.
-App.config.from_object(os.environ['APP_SETTINGS'])
+App = Flask(__name__)
+# Load app config from file
+config_module = SourceFileLoader('config', "{}/config.py".format(os.environ['APP_BASEDIR'])).load_module()
+config = getattr(config_module, os.environ['APP_SETTINGS'])
+
+App.config.from_object(config)
 App.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension') # Jade template support
 
 # init our scraper manager - the magic maker that loads our scrapers.

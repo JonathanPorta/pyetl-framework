@@ -23,3 +23,11 @@ To get started, create a new Python project and then `pip install pypscraper-fra
 
 To run the app flask app frontend: `pyscraper_flask`
 To run the worker process: `pyscraper_worker`
+
+The following two environment vars are required:
+```
+export APP_SETTINGS='DevelopmentConfig' # name of the corresponding config class for this env.
+export APP_BASEDIR=$(pwd) # must point to directory containing your config file.
+```
+
+A config file is also required. See `config.py.example`.

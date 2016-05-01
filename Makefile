@@ -32,6 +32,7 @@ deploy_production:
 release: package pip_release
 
 package: clean
+	python version.py
 	python setup.py sdist
 
 pip_release:
