@@ -21,6 +21,17 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 with open(path.join(here, 'VERSION'), encoding='utf-8') as f:
     version = f.read()
 
+# Include installed pip requirements
+from pip.req import parse_requirements
+
+# parse_requirements() returns generator of pip.req.InstallRequirement objects
+install_reqs = parse_requirements('requirements.txt', session=False)
+
+# reqs is a list of requirement
+# e.g. ['django==1.5.1', 'mezzanine==1.4.6']
+reqs = [str(ir.req) for ir in install_reqs]
+
+
 setup(
     name='pyscraper_framework',
 
@@ -78,7 +89,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=[],
+    install_requires=reqs,
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
@@ -90,7 +101,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'pyscraper_framework': ['templates/*', '.env', '../README.md', '../VERSION'], # TODO: Separate out the ui from the framework
+        'pyscraper_framework': ['templates/*', '.env', '../README.md', '../VERSION', '../requirements.txt'], # TODO: Separate out the ui from the framework
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
