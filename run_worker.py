@@ -1,3 +1,3 @@
-from pyscraper_framework import *
+from pyscraper_framework import Worker
 
-App.run()
+Worker.run()

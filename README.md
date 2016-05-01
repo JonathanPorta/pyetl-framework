@@ -20,3 +20,6 @@ Or
 Pyscraper is meant as a framework to help with the extraction, transformation and loading of data between sources.
 
 To get started, create a new Python project and then `pip install pypscraper-framework`.
+
+To run the app flask app frontend: `pyscraper_flask`
+To run the worker process: `pyscraper_worker`

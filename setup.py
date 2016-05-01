@@ -31,7 +31,6 @@ install_reqs = parse_requirements('requirements.txt', session=False)
 # e.g. ['django==1.5.1', 'mezzanine==1.4.6']
 reqs = [str(ir.req) for ir in install_reqs]
 
-
 setup(
     name='pyscraper_framework',
 
@@ -115,7 +114,8 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'pyscraper_framework=pyscraper_framework:App',
+            'pyscraper_flask=pyscraper_framework:run_flask',
+            'pyscraper_worker=pyscraper_framework:run_worker',
         ],
     },
 )
