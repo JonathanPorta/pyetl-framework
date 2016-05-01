@@ -12,8 +12,6 @@ class Config(object):
     JOBS_PKG = 'jobs'
     JOBS_DIR = os.path.join(basedir, JOBS_PKG)
 
-
-
 class ProductionConfig(Config):
     DEBUG = False
 

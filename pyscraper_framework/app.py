@@ -4,7 +4,7 @@ import operator
 import re
 import sys
 sys.setrecursionlimit(10000)
-from lib import ScraperManager
+from pyscraper_framework.lib import ScraperManager
 
 from flask import Flask, render_template, request, jsonify
 from collections import Counter
@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from rq import Queue
 from rq.job import Job
 
-from worker import conn
+from pyscraper_framework.worker import conn
 
 # from workers.yellowstone_orion import YellowstoneOrion
 

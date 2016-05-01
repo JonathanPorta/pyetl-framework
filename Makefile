@@ -2,13 +2,13 @@ run:
 	foreman start
 
 run_gunicorn:
-	gunicorn app:App
+	gunicorn pyscraper_framework:App
 
 run_flask:
-	python app.py
+	python run_flask.py
 
 run_worker:
-	python worker.py
+	python run_worker.py
 
 deps: install_local_dev
 
@@ -28,3 +28,14 @@ deploy_staging:
 
 deploy_production:
 	./scripts/heroku-deploy-production.sh
+
+release: package pip_release
+
+package: clean
+	python setup.py sdist
+
+pip_release:
+	twine upload dist/*
+
+clean:
+	rm -rf dist/
