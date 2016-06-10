@@ -7,10 +7,18 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'supersecret'
     BASE_DIR = basedir
-    SCRAPERS_PKG = 'scrapers'
-    SCRAPERS_DIR = os.path.join(basedir, SCRAPERS_PKG)
-    JOBS_PKG = 'jobs'
-    JOBS_DIR = os.path.join(basedir, JOBS_PKG)
+
+    PIPELINES_PKG = 'pipelines'
+    PIPELINES_DIR = os.path.join(basedir, PIPELINES_PKG)
+
+    EXTRACTORS_PKG = 'extractors'
+    EXTRACTORS_DIR = os.path.join(basedir, EXTRACTORS_PKG)
+
+    TRANSFORMERS_PKG = 'transformers'
+    TRANSFORMERS_DIR = os.path.join(basedir, TRANSFORMERS_PKG)
+
+    LOADERS_PKG = 'loaders'
+    LOADERS_DIR = os.path.join(basedir, LOADERS_PKG)
 
 class ProductionConfig(Config):
     DEBUG = False
