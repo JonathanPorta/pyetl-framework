@@ -1,6 +1,6 @@
 import os, sys, requests, re, operator
 sys.setrecursionlimit(10000)
-from pyscraper_framework.lib import ScraperManager
+from pyscraper_framework.lib import PipelineManager
 
 from flask import Flask, render_template, request, jsonify
 from collections import Counter
@@ -13,6 +13,7 @@ from pyscraper_framework.worker import conn
 
 # Define App
 App = Flask(__name__)
+
 # Load app config from file
 config_module = SourceFileLoader('config', os.path.join(os.environ['APP_BASEDIR'], 'config.py')).load_module()
 config = getattr(config_module, os.environ['APP_SETTINGS'])
@@ -20,9 +21,9 @@ config = getattr(config_module, os.environ['APP_SETTINGS'])
 App.config.from_object(config)
 App.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension') # Jade template support
 
-# init our scraper manager - the magic maker that loads our scrapers.
-scraper_manager = ScraperManager(App)
-scraper_manager.load() # blocking call that loads scrapers from FS.
+# init our pipeline manager - the magic maker that loads our pipelines.
+pipeline_manager = PipelineManager(App)
+pipeline_manager.load() # blocking call that loads pipeline from FS.
 
 q = Queue(connection=conn)
 
@@ -59,24 +60,27 @@ def scrape(url):
     master_data = {"url": url}
     return master_data
 
-@App.route('/scrapers', methods=['GET'])
-def scrapers_list():
-    scrapers = scraper_manager.get_scrapers()
-    print(scraper_manager._jobs)
-    print('scrapers: ', scrapers)
-    return render_template('scrapers.jade', scrapers=scrapers.values())
+@App.route('/pipelines', methods=['GET'])
+def pipelines_list():
+    pipelines = pipeline_manager.get_pipelines()
+    print(pipeline_manager._pipelines)
+    print(pipeline_manager._extractors)
+    print(pipeline_manager._transformers)
+    print(pipeline_manager._loaders)
+    print('pipelines: ', pipelines)
+    return render_template('pipelines.jade', pipelines=pipelines.values())
 
-@App.route('/scrapers/<name>', methods=['GET'])
-def scraper_detail(name):
-    scraper = scraper_manager.init_scraper(name)
-    return render_template('scraper.jade', scraper=scraper)
+@App.route('/pipelines/<name>', methods=['GET'])
+def pipeline_detail(name):
+    pipeline = pipeline_manager.init_pipeline(name)
+    return render_template('pipeline.jade', pipeline=pipeline)
 
-@App.route('/scrapers/<name>/start', methods=['GET'])
-def scraper_start(name):
-    scraper = scraper_manager.init_scraper(name)
-    scraper.start(q)
+@App.route('/pipelines/<name>/start', methods=['GET'])
+def pipeline_start(name):
+    pipeline = pipeline_manager.init_pipeline(name)
+    pipeline.start(q)
     print("log shit")
-    return render_template('scraper_start.jade', scraper=scraper)
+    return render_template('pipeline_start.jade', pipeline=pipeline)
 
 if __name__ == '__main__':
     App.run()

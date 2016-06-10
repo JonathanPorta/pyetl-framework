@@ -36,3 +36,14 @@ export APP_BASEDIR=$(pwd) # must point to directory containing your config file.
 ```
 
 A config file is also required. See `config.py.example`.
+
+### Concepts
+The framework relies heavily on naming conventions and magically imports.
+#### Pipe
+This represents the flow of data from a source to a target. `pipe.start()` should do whatever is necessary determine and enqueue any and all `ETLJob`s that must execute in order for a run to be considered succesfull.
+
+#### ETLJob
+A base class defined in the framework. It has three methods: extract, transform, load.
+
+#### Transformer/Extractor/Loader
+Extend this class with a class that has the same name as your pipe's class. The ETLJob will run `{Transformer|Extractor|Loader}.execute()` when executing.

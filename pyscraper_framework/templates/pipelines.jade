@@ -1,0 +1,12 @@
+extends ./layout.jade
+
+block title
+  |pyscrape - Pipelines
+
+block content
+  h2 Pipelines
+
+  ul
+    each pipeline in pipelines
+      li
+        a(href="/pipelines/#{pipeline['class_name']}")= pipeline['name']
