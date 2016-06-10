@@ -1,4 +1,6 @@
-import os, re
+import os, re, sys
+from os import path
+from importlib.machinery import SourceFileLoader
 
 class ScraperManager():
     # getter
@@ -15,14 +17,18 @@ class ScraperManager():
         self.jobs_dir = App.config['JOBS_DIR']
         self.jobs_pkg = App.config['JOBS_PKG']
 
+        self.base_dir = App.config['BASE_DIR']
+        # Ensure we load anything we need from the package using this framework
+        sys.path.append(os.path.dirname(path.join(self.base_dir, '*')))
+
     # TODO: Perhaps we should check _scrapers first?
     def init_scraper(self, name):
         print("init scrapper by name: '{}'".format(name))
         # magic load the default job for this scraper type
-        job_metadata = self.__lookup_class_by_class_name(name, self.jobs_pkg)
+        job_metadata = self.__lookup_class_by_class_name(name, self.jobs_pkg, self.jobs_dir)
         job_class = self.__load_class(job_metadata)
 
-        scraper_metadata = self.__lookup_class_by_class_name(name, self.scrapers_pkg)
+        scraper_metadata = self.__lookup_class_by_class_name(name, self.scrapers_pkg, self.scrapers_dir)
         scraper_class = self.__load_class(scraper_metadata)
         return scraper_class(self, scraper_metadata['name'], job_class)
 
@@ -38,12 +44,12 @@ class ScraperManager():
             for filename in files:
                 # Make sure we have a .py file and not a "hidden" .py file such as __init__.py
                 if filename.endswith('.py') and not filename.startswith('_'):
-                    class_metadata = self.__lookup_class_by_file_name(filename, package_name)
+                    class_metadata = self.__lookup_class_by_file_name(filename, package_name, directory)
                     classes[class_metadata['name']] = class_metadata
         return classes
 
     # assumes that that scrapers follow the name convention: ScraperClass is in a file named scraper_class.py in the directory scrapers.
-    def __lookup_class_by_class_name(self, class_name, package_name):
+    def __lookup_class_by_class_name(self, class_name, package_name, directory):
         print("lookup class by class name: '{}'".format(class_name))
         pieces = re.findall('[A-Z][a-z]*', class_name)
         pieces = map(lambda s: s.lower(), pieces)
@@ -51,14 +57,15 @@ class ScraperManager():
         file_name = '{}.py'.format(module_name)
         return {
             'file_name': file_name,
-            'import_string': '{}.{}'.format(package_name, module_name),
+            'import_path': path.join(directory, file_name),
             'module_name': module_name,
             'class_name': class_name,
-            'name': class_name
+            'name': class_name,
+            'directory': directory
         }
 
     # assumes that that scrapers follow the name convention: ScraperClass is in a file named scraper_class.py in the directory scrapers.
-    def __lookup_class_by_file_name(self, file_name, package_name):
+    def __lookup_class_by_file_name(self, file_name, package_name, directory):
         print("lookup class by file name: '{}'".format(file_name))
         module_name = file_name.replace('.py', '')
         pieces = module_name.split('_')
@@ -66,16 +73,20 @@ class ScraperManager():
         class_name = ''.join(pieces)
         return {
             'file_name': file_name,
-            'import_string': '{}.{}'.format(package_name, module_name),
+            'import_path': path.join(directory, file_name),
             'module_name': module_name,
             'class_name': class_name,
-            'name': class_name
+            'name': class_name,
+            'directory': directory
         }
 
     def __load_class(self, metadata):
         # TODO: Either do this with the load_scrapers() call or refactor to use array to check for validity and handle error.
-        parent_module = __import__(metadata['import_string'])
-        child_module = getattr(parent_module, metadata['module_name'])
-        _class = getattr(child_module, metadata['class_name'])
-
+        # parent_module = __import__(metadata['import_path'])
+        # child_module = getattr(parent_module, metadata['module_name'])
+        print(metadata)
+        print('-----------------------------------------------')
+        _module = SourceFileLoader(metadata['module_name'], metadata['import_path']).load_module()
+        print(_module)
+        _class = getattr(_module, metadata['class_name'])
         return _class
