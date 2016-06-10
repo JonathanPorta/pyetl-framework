@@ -1,8 +1,4 @@
-import os
-import requests
-import operator
-import re
-import sys
+import os, sys, requests, re, operator
 sys.setrecursionlimit(10000)
 from pyscraper_framework.lib import ScraperManager
 
@@ -18,7 +14,7 @@ from pyscraper_framework.worker import conn
 # Define App
 App = Flask(__name__)
 # Load app config from file
-config_module = SourceFileLoader('config', "{}/config.py".format(os.environ['APP_BASEDIR'])).load_module()
+config_module = SourceFileLoader('config', os.path.join(os.environ['APP_BASEDIR'], 'config.py')).load_module()
 config = getattr(config_module, os.environ['APP_SETTINGS'])
 
 App.config.from_object(config)
