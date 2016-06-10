@@ -1,7 +1,6 @@
 import os
 
 class ETLJob():
-
     def __init__(self, extractor, transformer, loader):
         print("ETLJob base class")
 
