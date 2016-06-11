@@ -2,7 +2,7 @@ run:
 	foreman start
 
 run_gunicorn:
-	gunicorn pyscraper_framework:App
+	gunicorn pyetl_framework:App
 
 run_flask:
 	python run_flask.py
@@ -11,6 +11,7 @@ run_worker:
 	python run_worker.py
 
 deps: install_local_dev
+	pip install -r requirements.txt
 
 install_local_dev:
 	./scripts/localdev-setup.sh

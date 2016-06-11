@@ -1,6 +1,6 @@
 import os, sys, requests, re, operator
 sys.setrecursionlimit(10000)
-from pyscraper_framework.lib import PipelineManager
+from pyetl_framework.lib import PipelineManager
 
 from flask import Flask, render_template, request, jsonify
 from collections import Counter
@@ -9,7 +9,7 @@ from rq import Queue
 from rq.job import Job
 from importlib.machinery import SourceFileLoader
 
-from pyscraper_framework.worker import conn
+from pyetl_framework.worker import conn
 
 # Define App
 App = Flask(__name__)

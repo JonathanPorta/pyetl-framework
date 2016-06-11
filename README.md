@@ -22,12 +22,12 @@ Then, to push to the package to the repository:
 `make release`
 
 ### Usage
-Pyscraper is meant as a framework to help with the extraction, transformation and loading of data between sources.
+Pyetl is meant as a framework to help with the extraction, transformation and loading of data between sources.
 
 To get started, create a new Python project and then `pip install pypscraper-framework`.
 
-To run the app flask app frontend: `pyscraper_flask`
-To run the worker process: `pyscraper_worker`
+To run the app flask app frontend: `pyetl_flask`
+To run the worker process: `pyetl_worker`
 
 The following two environment vars are required:
 ```

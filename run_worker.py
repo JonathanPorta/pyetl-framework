@@ -1,3 +1,3 @@
-from pyscraper_framework import Worker
+from pyetl_framework import Worker
 
 Worker.run()
