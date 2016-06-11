@@ -32,7 +32,7 @@ install_reqs = parse_requirements('requirements.txt', session=False)
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
-    name='pyscraper_framework',
+    name='pyetl_framework',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -43,7 +43,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/jonathanporta/pyscraper',
+    url='https://github.com/jonathanporta/pyetl_framework',
 
     # Author details
     author='Jonathan Porta',
@@ -100,7 +100,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'pyscraper_framework': ['templates/*', '.env', '../README.md', '../VERSION', '../requirements.txt'], # TODO: Separate out the ui from the framework
+        'pyetl_framework': ['templates/*', '.env', '../README.md', '../VERSION', '../requirements.txt'], # TODO: Separate out the ui from the framework
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -114,8 +114,8 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'pyscraper_flask=pyscraper_framework:run_flask',
-            'pyscraper_worker=pyscraper_framework:run_worker',
+            'pyetl_flask=pyetl_framework:run_flask',
+            'pyetl_worker=pyetl_framework:run_worker',
         ],
     },
 )

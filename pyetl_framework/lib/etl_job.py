@@ -12,15 +12,15 @@ class ETLJob():
         print('etl_Job.py::execute() - the base class.')
         print('etl_Job.py::execute() - Extracting...')
         data = self.extract()
-        print('etl_Job.py::execute() - extracted: ', data)
+        print('etl_Job.py::execute() - extracted: ')
 
         print('etl_Job.py::execute() - Transforming...')
         transformed_data = self.transform(data)
-        print('etl_Job.py::execute() - transformed: ', transformed_data)
+        print('etl_Job.py::execute() - transformed: ')
 
         print('etl_Job.py::execute() - Saving...')
         saved_data = self.load(transformed_data)
-        print('etl_Job.py::execute() - saved: ', saved_data)
+        print('etl_Job.py::execute() - saved: ')
 
     def extract(self, *args, **kwargs):
         print("etl_Job.py::extract() - the base class.")

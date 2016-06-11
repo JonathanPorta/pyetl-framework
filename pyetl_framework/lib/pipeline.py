@@ -1,5 +1,5 @@
 import os
-from pyscraper_framework.lib import ETLJob
+from pyetl_framework.lib import ETLJob
 
 class Pipeline():
     def __init__(self, pipeline_manager, name, extractor_class, transformer_class, loader_class):
